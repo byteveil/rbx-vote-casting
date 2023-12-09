@@ -1,22 +1,22 @@
 local voteCasting = {}
 
 function voteCasting.new()
-	local self = {}
+	local voteObject = {}
 	local votesCasted = {}
 
-	function self:CastVote(player: Player)
+	function voteObject:CastVote(player: Player)
 		if not votesCasted[player.UserId] then
 			votesCasted[player.UserId] = 1
 		end
 	end
 
-	function self:RevokeVote(player: Player)
+	function voteObject:RevokeVote(player: Player)
 		if votesCasted[player.UserId] then
 			votesCasted[player.UserId] = nil
 		end
 	end
 
-	function self:GatherVotes()
+	function voteObject:GatherVotes()
 		local totalVotes = 0
 
 		for _, votes in pairs(votesCasted) do
@@ -25,6 +25,8 @@ function voteCasting.new()
 
 		return totalVotes
 	end
+
+	return voteObject
 end
 
 function voteCasting:GetHighestVote(...)
@@ -49,7 +51,7 @@ function voteCasting:GetAllVotes(...)
 	local totalVotes = 0
 
 	for _, voteObject in pairs(voteObjects) do
-		totalVotes = totalVotes + voteObject:GatherVotes()
+		totalVotes += voteObject:GatherVotes()
 	end
 
 	return totalVotes
